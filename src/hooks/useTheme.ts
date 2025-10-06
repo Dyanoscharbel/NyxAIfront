@@ -5,21 +5,21 @@ import { useState, useEffect } from 'react'
 type Theme = 'light' | 'dark'
 
 export function useTheme() {
-  const [theme, setTheme] = useState<Theme>('dark')
+  const [theme, setTheme] = useState<Theme>('light')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    // Récupérer le thème depuis localStorage (le script inline l'a déjà appliqué)
-    const savedTheme = localStorage.getItem('theme') as Theme || 'dark'
+    // Retrieve theme from localStorage (inline script has already applied it)
+    const savedTheme = localStorage.getItem('theme') as Theme || 'light'
     setTheme(savedTheme)
   }, [])
 
   useEffect(() => {
     if (mounted) {
-      // Sauvegarder le thème dans localStorage
+      // Save theme to localStorage
       localStorage.setItem('theme', theme)
-      // Appliquer le thème à l'élément HTML (au cas où il change dynamiquement)
+      // Apply theme to HTML element (in case it changes dynamically)
       document.documentElement.className = theme
     }
   }, [theme, mounted])
@@ -28,9 +28,9 @@ export function useTheme() {
     setTheme(prev => prev === 'dark' ? 'light' : 'dark')
   }
 
-  // Éviter l'hydration mismatch
+  // Avoid hydration mismatch
   if (!mounted) {
-    return { theme: 'dark', toggleTheme: () => {}, mounted: false }
+    return { theme: 'light', toggleTheme: () => {}, mounted: false }
   }
 
   return { theme, toggleTheme, mounted }

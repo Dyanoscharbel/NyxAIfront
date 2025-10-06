@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { locales, Locale } from '@/lib/i18n';
 
 export function useI18n() {
-  const [currentLocale, setCurrentLocale] = useState<Locale>('fr');
+  const [currentLocale, setCurrentLocale] = useState<Locale>('en');
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Initialize locale from localStorage on mount
@@ -13,6 +13,9 @@ export function useI18n() {
     if (savedLocale && (savedLocale === 'en' || savedLocale === 'fr')) {
       // Only update if different to avoid unnecessary re-renders
       setCurrentLocale(prev => prev !== savedLocale ? savedLocale : prev);
+    } else {
+      // Set default to English if no saved locale
+      setCurrentLocale('en');
     }
     setIsHydrated(true);
   }, []);

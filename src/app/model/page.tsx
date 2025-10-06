@@ -4,6 +4,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { SimplePieChart, SimpleBarChart, SimpleDonutChart } from '@/components/charts/SimpleCharts'
@@ -21,11 +22,13 @@ import {
   Star,
   Calendar,
   Activity,
-  Info
+  Info,
+  Brain,
+  ArrowRight
 } from 'lucide-react'
 import { ModelMetrics } from '@/types/exoplanet'
 
-// Données réelles pour les métriques du modèle
+// Real data for model metrics
 const mockModelMetrics: ModelMetrics = {
   version: 'v2.4.1',
   accuracy: 0.9333333333333333,
@@ -55,7 +58,7 @@ const mockModelMetrics: ModelMetrics = {
   }
 }
 
-// Données pour les graphiques
+// Data for charts
 const performanceHistory = [
   { version: 'v1.0', accuracy: 0.876, precision: 0.852, recall: 0.883, f1: 0.867 },
   { version: 'v1.5', accuracy: 0.891, precision: 0.887, recall: 0.895, f1: 0.891 },
@@ -86,10 +89,10 @@ const featureImportance = [
 ]
 
 const confusionMatrixData = [
-  { name: 'Vrais Positifs', value: mockModelMetrics.confusionMatrix.truePositive, color: '#10b981' },   // Vert émeraude
-  { name: 'Faux Positifs', value: mockModelMetrics.confusionMatrix.falsePositive, color: '#f59e0b' },  // Orange ambre
-  { name: 'Vrais Négatifs', value: mockModelMetrics.confusionMatrix.trueNegative, color: '#6366f1' },   // Indigo
-  { name: 'Faux Négatifs', value: mockModelMetrics.confusionMatrix.falseNegative, color: '#ef4444' }    // Rouge
+  { name: 'True Positives', value: mockModelMetrics.confusionMatrix.truePositive, color: '#10b981' },   // Emerald green
+  { name: 'False Positives', value: mockModelMetrics.confusionMatrix.falsePositive, color: '#f59e0b' },  // Amber orange
+  { name: 'True Negatives', value: mockModelMetrics.confusionMatrix.trueNegative, color: '#6366f1' },   // Indigo
+  { name: 'False Negatives', value: mockModelMetrics.confusionMatrix.falseNegative, color: '#ef4444' }    // Red
 ]
 
 const trainingMetrics = [
@@ -110,7 +113,7 @@ export default function ModelPage() {
   return (
     <AppLayout>
       <div className="space-y-8">
-        {/* En-tête */}
+        {/* Header */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <BarChart3 className="h-8 w-8 text-primary glow-effect" />
@@ -127,23 +130,34 @@ export default function ModelPage() {
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
-            <Badge variant="default" className="glow-effect">
-              <Cpu className="h-3 w-3 mr-1" />
-              Gradient Boosting v1.0
-            </Badge>
-            <Badge variant="secondary">
-              <Calendar className="h-3 w-3 mr-1" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Badge variant="default" className="glow-effect">
+                <Cpu className="h-3 w-3 mr-1" />
+                Gradient Boosting v1.0
+              </Badge>
+              <Badge variant="secondary">
+                <Calendar className="h-3 w-3 mr-1" />
 {t('model.trainedOn')} {new Date(mockModelMetrics.trainedOn).toLocaleDateString(locale === 'en' ? 'en-US' : 'fr-FR')}
-            </Badge>
-            <Badge variant="outline">
-              <Database className="h-3 w-3 mr-1" />
+              </Badge>
+              <Badge variant="outline">
+                <Database className="h-3 w-3 mr-1" />
 {mockModelMetrics.datasetSize.toLocaleString()} {t('model.samples')}
-            </Badge>
+              </Badge>
+            </div>
+            
+            <Button 
+              onClick={() => window.location.href = '/classification'}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+            >
+              <Brain className="h-4 w-4 mr-2" />
+              {locale === 'en' ? 'Try Classification' : 'Essayer Classification'}
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
           </div>
         </div>
 
-        {/* Information sur le modèle */}
+        {/* Model information */}
         <Alert className="border-primary/20 bg-primary/5">
           <Info className="h-4 w-4" />
           <AlertTitle>
@@ -161,7 +175,7 @@ export default function ModelPage() {
           </AlertDescription>
         </Alert>
 
-        {/* Métriques principales */}
+        {/* Main metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card className="planet-card">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -234,7 +248,7 @@ export default function ModelPage() {
           </Card>
         </div>
 
-        {/* Métriques de validation croisée */}
+        {/* Cross-validation metrics */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold flex items-center space-x-2">
             <Activity className="h-5 w-5 text-primary" />
@@ -315,7 +329,7 @@ export default function ModelPage() {
           </div>
         </div>
 
-        {/* Onglets pour les différentes analyses */}
+        {/* Tabs for different analyses */}
         <Tabs defaultValue="confusion" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="confusion">

@@ -23,76 +23,77 @@ import {
   ExternalLink,
   RefreshCw,
   Loader2,
-  CheckCircle
+  CheckCircle,
+  Eye
 } from 'lucide-react'
 
 export default function DashboardPage() {
   const { t, locale, isHydrated } = useI18n();
   
-  // État pour les données NASA KOI
+  // State for NASA KOI data
   const [koiStats, setKoiStats] = useState<KOIStats | null>(null);
-  const [loading, setLoading] = useState(false); // Pas de loading initial
-  const [refreshing, setRefreshing] = useState(false); // Indicateur de refresh
+  const [loading, setLoading] = useState(false); // No initial loading state
+  const [refreshing, setRefreshing] = useState(false); // Refresh indicator
   const [error, setError] = useState<string | null>(null);
   const [lastUpdateNotification, setLastUpdateNotification] = useState<string | null>(null);
 
-  // Fonction pour récupérer les statistiques NASA avec chargement progressif
+  // Function to fetch NASA statistics with progressive loading
   const fetchNASAStatsProgressive = async () => {
     try {
-      console.log('🚀 Récupération progressive des données NASA KOI...');
+      console.log('🚀 Progressive NASA KOI data retrieval...');
       
-      // Utiliser la méthode avec cache + background refresh
+      // Use method with cache + background refresh
       const stats = await NASAADQLService.getKOIStatsWithBackgroundRefresh();
       
-      // Si on avait déjà des données et qu'on reçoit de nouvelles données fraîches
+      // If we already had data and receive new fresh data
       if (koiStats && !stats.isFromCache && koiStats.isFromCache) {
         setLastUpdateNotification(locale === 'en' ? 'Data updated!' : 'Données mises à jour !');
-        setTimeout(() => setLastUpdateNotification(null), 3000); // Masquer après 3 secondes
+        setTimeout(() => setLastUpdateNotification(null), 3000); // Hide after 3 seconds
       }
       
       setKoiStats(stats);
       
       if (stats.isFromCache) {
-        console.log('📋 Données affichées depuis le cache');
+        console.log('📋 Data displayed from cache');
       } else {
-        console.log('✅ Nouvelles données NASA récupérées:', stats);
+        console.log('✅ New NASA data retrieved:', stats);
       }
       
       setError(null);
     } catch (err) {
-      console.error('❌ Erreur NASA API:', err);
-      setError(err instanceof Error ? err.message : 'Erreur lors de la récupération des données NASA');
+      console.error('❌ NASA API Error:', err);
+      setError(err instanceof Error ? err.message : 'Error retrieving NASA data');
     }
   };
 
-  // Fonction pour forcer un refresh manuel
+  // Function to force a manual refresh
   const forceRefreshNASAStats = async () => {
     setRefreshing(true);
     setError(null);
     
     try {
-      console.log('🔄 Refresh manuel des données NASA...');
+      console.log('🔄 Manual NASA data refresh...');
       const stats = await NASAADQLService.getKOIStats(true); // Force refresh
       setKoiStats(stats);
-      console.log('✅ Refresh manuel terminé:', stats);
+      console.log('✅ Manual refresh completed:', stats);
     } catch (err) {
-      console.error('❌ Erreur lors du refresh manuel:', err);
-      setError(err instanceof Error ? err.message : 'Erreur lors du refresh des données NASA');
+      console.error('❌ Error during manual refresh:', err);
+      setError(err instanceof Error ? err.message : 'Error refreshing NASA data');
     } finally {
       setRefreshing(false);
     }
   };
 
-  // Récupération des données au montage du composant (progressif)
+  // Data retrieval on component mount (progressive)
   useEffect(() => {
     fetchNASAStatsProgressive();
   }, []);
 
-  // Actualisation automatique en arrière-plan toutes les 10 minutes
+  // Automatic background refresh every 10 minutes
   useEffect(() => {
     const interval = setInterval(() => {
-      if (document.visibilityState === 'visible') { // Seulement si la page est visible
-        console.log('🔄 Actualisation automatique en arrière-plan...');
+      if (document.visibilityState === 'visible') { // Only if page is visible
+        console.log('🔄 Automatic background refresh...');
         fetchNASAStatsProgressive();
       }
     }, 10 * 60 * 1000); // 10 minutes
@@ -100,14 +101,14 @@ export default function DashboardPage() {
     return () => clearInterval(interval);
   }, [koiStats]);
 
-  // Données pour les graphiques basées sur les vraies données NASA
+  // Chart data based on real NASA data
   const dispositionData = koiStats ? [
     { name: isHydrated ? t('dashboard.stats.confirmed') : 'Confirmées', value: koiStats.confirmed, color: '#10b981' },
     { name: isHydrated ? t('dashboard.stats.candidates') : 'Candidates', value: koiStats.candidates, color: '#f59e0b' },
     { name: isHydrated ? t('dashboard.stats.falsePositives') : 'Faux Positifs', value: koiStats.falsePositives, color: '#ef4444' }
   ] : [];
 
-  // Affichage de chargement
+  // Loading display
   if (loading) {
     return (
       <AppLayout>
@@ -121,7 +122,7 @@ export default function DashboardPage() {
     );
   }
 
-  // Affichage d'erreur avec bouton de retry
+  // Error display with retry button
   if (error) {
     return (
       <AppLayout>
@@ -142,7 +143,7 @@ export default function DashboardPage() {
   return (
     <AppLayout>
       <div className="space-y-6">
-        {/* Notification de mise à jour */}
+        {/* Update notification */}
         {lastUpdateNotification && (
           <div className="fixed top-4 right-4 z-50 animate-in slide-in-from-right-2 duration-300">
             <div className="bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2">
@@ -152,7 +153,7 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* En-tête */}
+        {/* Header */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <Telescope className="h-8 w-8 text-primary glow-effect" />
@@ -244,7 +245,7 @@ export default function DashboardPage() {
             centerLabel={locale === 'en' ? 'Total KOI' : 'Total KOI'}
           />
 
-          {/* Boutons d'accès rapide */}
+          {/* Quick access buttons */}
           <Card className="planet-card">
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center space-x-2 text-lg">
@@ -267,7 +268,7 @@ export default function DashboardPage() {
               <Button 
                 variant="outline" 
                 className="w-full justify-start p-0 h-auto overflow-hidden hover:bg-primary/5 transition-all duration-200 hover:shadow-md"
-                onClick={() => window.open('/visualization-3d', '_blank')}
+                onClick={() => window.open(process.env.NEXT_PUBLIC_EDUCATIONAL_VISUALIZER_BASE_URL || 'https://visualize3-d.vercel.app', '_blank')}
               >
                 <div className="flex items-center w-full p-4 space-x-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-500/10">
@@ -288,11 +289,11 @@ export default function DashboardPage() {
                 </div>
               </Button>
 
-              {/* Bouton Résultats d'analyse */}
+              {/* Analysis results button */}
               <Button 
                 variant="outline" 
                 className="w-full justify-start p-0 h-auto overflow-hidden hover:bg-primary/5 transition-all duration-200 hover:shadow-md"
-                onClick={() => window.open('/analysis-results', '_blank')}
+                onClick={() => window.location.href = '/model'}
               >
                 <div className="flex items-center w-full p-4 space-x-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-green-500/10">
@@ -317,7 +318,7 @@ export default function DashboardPage() {
               <Button 
                 variant="outline" 
                 className="w-full justify-start p-0 h-auto overflow-hidden hover:bg-primary/5 transition-all duration-200 hover:shadow-md"
-                onClick={() => window.open('/test-nasa', '_blank')}
+                onClick={() => window.open('https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblView/nph-tblView?app=ExoTbls&config=', '_blank')}
               >
                 <div className="flex items-center w-full p-4 space-x-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-blue-500/10">
@@ -325,12 +326,12 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex-1 text-left space-y-1">
                     <h4 className="font-semibold text-sm">
-                      {locale === 'en' ? 'Test NASA API' : 'Test API NASA'}
+                      {locale === 'en' ? 'View NASA Database' : 'Visualiser la BD de la NASA'}
                     </h4>
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {locale === 'en' 
-                        ? 'Test connection to NASA KOI data archive'
-                        : 'Tester la connexion aux archives de données NASA KOI'
+                        ? 'Access NASA exoplanet archive database'
+                        : 'Accéder à la base de données d\'archives d\'exoplanètes NASA'
                       }
                     </p>
                   </div>
@@ -338,19 +339,19 @@ export default function DashboardPage() {
                 </div>
               </Button>
 
-              {/* Bouton Interface NASA */}
+              {/* Bouton Eye of NASA */}
               <Button 
                 variant="outline" 
                 className="w-full justify-start p-0 h-auto overflow-hidden hover:bg-primary/5 transition-all duration-200 hover:shadow-md"
-                onClick={() => window.open('https://exoplanetarchive.ipac.caltech.edu/applications/ExoTables/', '_blank')}
+                onClick={() => window.open('https://eyes.nasa.gov/apps/solar-system/', '_blank')}
               >
                 <div className="flex items-center w-full p-4 space-x-4">
                   <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-purple-500/10">
-                    <ExternalLink className="h-6 w-6 text-purple-500" />
+                    <Eye className="h-6 w-6 text-purple-500" />
                   </div>
                   <div className="flex-1 text-left space-y-1">
                     <h4 className="font-semibold text-sm">
-                      {locale === 'en' ? 'NASA Interface' : 'Interface NASA'}
+                      {locale === 'en' ? 'Eye of NASA' : 'Eye of NASA'}
                     </h4>
                     <p className="text-xs text-muted-foreground line-clamp-2">
                       {locale === 'en' 

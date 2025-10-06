@@ -25,7 +25,7 @@ import {
 } from 'lucide-react'
 import { ModelMetrics } from '@/types/exoplanet'
 
-// Données réelles pour les métriques du modèle
+// Real data for model metrics
 const mockModelMetrics: ModelMetrics = {
   version: 'v2.4.1',
   accuracy: 0.9333333333333333,
@@ -55,7 +55,7 @@ const mockModelMetrics: ModelMetrics = {
   }
 }
 
-// Données pour les graphiques
+// Data for charts
 const performanceHistory = [
   { version: 'v1.0', accuracy: 0.876, precision: 0.852, recall: 0.883, f1: 0.867 },
   { version: 'v1.5', accuracy: 0.891, precision: 0.887, recall: 0.895, f1: 0.891 },

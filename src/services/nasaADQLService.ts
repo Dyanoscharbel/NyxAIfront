@@ -1,6 +1,6 @@
 /**
- * Service pour interroger les archives NASA KOI via ADQL
- * Récupère les données KOI (Kepler Objects of Interest) directement depuis NASA Exoplanet Archive
+ * Service for querying NASA KOI archives via ADQL
+ * Retrieves KOI (Kepler Objects of Interest) data directly from NASA Exoplanet Archive
  */
 
 export interface KOIStats {
@@ -9,8 +9,8 @@ export interface KOIStats {
   candidates: number;
   falsePositives: number;
   lastUpdated: string;
-  cachedAt?: string;  // Quand les données ont été mises en cache
-  isFromCache?: boolean; // Indique si les données viennent du cache
+  cachedAt?: string;  // When data was cached
+  isFromCache?: boolean; // Indicates if data comes from cache
 }
 
 export interface KOIData {
@@ -23,10 +23,10 @@ export interface KOIData {
   koi_teq: number;
 }
 
-// Interface spécifique pour la page data
+// Specific interface for data page
 export interface NASAKOITableData {
   kepoi_name: string;         // KOI name
-  kepler_name?: string;       // Kepler name (si confirmé)
+  kepler_name?: string;       // Kepler name (if confirmed)
   koi_disposition: string;    // Disposition
   koi_period: number;         // Period
   koi_prad: number;          // Radius
@@ -41,34 +41,34 @@ export interface CacheManager {
 
 export class NASAADQLService {
   
-  // URL de notre API route Next.js qui sert de proxy
+  // URL of our Next.js API route that serves as proxy
   private static readonly API_BASE_URL = '/api/nasa-koi';
   
-  // Clés pour le localStorage
+  // Keys for localStorage
   private static readonly CACHE_KEYS = {
     STATS: 'nasa_koi_stats',
     DETAILS: 'nasa_koi_details',
     EXPIRY: 'nasa_koi_expiry'
   };
   
-  // Durée de validité du cache (30 minutes)
-  private static readonly CACHE_DURATION = 30 * 60 * 1000; // 30 minutes en millisecondes
+  // Cache validity duration (30 minutes)
+  private static readonly CACHE_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
   
   /**
-   * Récupère les statistiques des KOI avec système de cache intelligent
+   * Retrieves KOI statistics with intelligent cache system
    */
   static async getKOIStats(forceRefresh: boolean = false): Promise<KOIStats> {
     try {
-      // 1. Vérifier le cache s'il n'y a pas de refresh forcé
+      // 1. Check cache if no forced refresh
       if (!forceRefresh) {
         const cachedStats = this.getCachedStats();
         if (cachedStats && this.isCacheValid('stats')) {
-          console.log('📋 Utilisation des stats en cache');
+          console.log('📋 Using cached stats');
           return { ...cachedStats, isFromCache: true };
         }
       }
 
-      console.log('🌌 Récupération des statistiques KOI depuis NASA...');
+      console.log('🌌 Retrieving KOI statistics from NASA...');
       
       const response = await fetch(`${this.API_BASE_URL}?action=stats`, {
         method: 'GET',
@@ -79,10 +79,10 @@ export class NASAADQLService {
       });
       
       if (!response.ok) {
-        // En cas d'erreur, essayer de retourner le cache même expiré
+        // In case of error, try to return expired cache
         const cachedStats = this.getCachedStats();
         if (cachedStats) {
-          console.log('⚠️ Erreur API, utilisation du cache expiré');
+          console.log('⚠️ API Error, using expired cache');
           return { ...cachedStats, isFromCache: true };
         }
         
@@ -92,7 +92,7 @@ export class NASAADQLService {
       
       const stats = await response.json();
       
-      // 2. Mettre en cache les nouvelles données
+      // 2. Cache new data
       const statsWithCache = {
         ...stats,
         cachedAt: new Date().toISOString(),
@@ -105,46 +105,46 @@ export class NASAADQLService {
       return statsWithCache;
       
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des statistiques KOI:', error);
+      console.error('❌ Error retrieving KOI statistics:', error);
       
-      // Essayer de retourner le cache en cas d'erreur
+      // Try to return cache in case of error
       const cachedStats = this.getCachedStats();
       if (cachedStats) {
-        console.log('🔄 Retour au cache suite à l\'erreur');
+        console.log('🔄 Fallback to cache due to error');
         return { ...cachedStats, isFromCache: true };
       }
       
-      throw new Error('Impossible de récupérer les données NASA KOI');
+      throw new Error('Unable to retrieve NASA KOI data');
     }
   }
 
   /**
-   * Récupère les stats en cache mais lance une actualisation en arrière-plan
+   * Retrieve cached stats but launch background refresh
    */
   static async getKOIStatsWithBackgroundRefresh(): Promise<KOIStats> {
-    // 1. Récupérer le cache immédiatement si disponible
+    // 1. Retrieve cache immediately if available
     const cachedStats = this.getCachedStats();
     
-    // 2. Lancer l'actualisation en arrière-plan
+    // 2. Launch background refresh
     if (!this.isCacheValid('stats')) {
-      console.log('🔄 Actualisation en arrière-plan...');
-      // Ne pas attendre la réponse, juste lancer la requête
+      console.log('🔄 Background refresh...');
+      // Don't wait for response, just launch the request
       this.getKOIStats(true).catch(error => {
-        console.warn('⚠️ Échec de l\'actualisation en arrière-plan:', error);
+        console.warn('⚠️ Background refresh failed:', error);
       });
     }
 
-    // 3. Retourner immédiatement le cache s'il existe
+    // 3. Return cache immediately if it exists
     if (cachedStats) {
       return { ...cachedStats, isFromCache: true };
     }
 
-    // 4. Si pas de cache, faire une requête normale
+    // 4. If no cache, make normal request
     return this.getKOIStats(false);
   }
 
   /**
-   * Méthodes de gestion du cache localStorage
+   * localStorage cache management methods
    */
   private static getCachedStats(): KOIStats | null {
     try {
@@ -164,7 +164,7 @@ export class NASAADQLService {
       
       localStorage.setItem(this.CACHE_KEYS.STATS, JSON.stringify(stats));
       
-      // Mettre à jour l'expiration
+      // Update expiration
       const expiry = Date.now() + this.CACHE_DURATION;
       const expiryData = this.getExpiryData();
       expiryData.stats = expiry;
@@ -231,7 +231,7 @@ export class NASAADQLService {
   }
 
   /**
-   * Récupère les détails des KOI avec pagination
+   * Retrieves KOI details with pagination
    */
   static async getKOIDetails(limit: number = 100, offset: number = 0): Promise<KOIData[]> {
     try {
@@ -252,17 +252,17 @@ export class NASAADQLService {
       return data as KOIData[];
       
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des détails KOI:', error);
+      console.error('❌ Error retrieving KOI details:', error);
       throw error;
     }
   }
 
   /**
-   * Récupère TOUTES les données KOI pour la page data avec colonnes spécifiques
+   * Retrieves ALL KOI data for the data page with specific columns
    */
   static async getKOITableData(): Promise<NASAKOITableData[]> {
     try {
-      console.log(`🌌 Récupération de TOUTES les données KOI pour tableau...`);
+      console.log(`🌌 Retrieving ALL KOI data for table...`);
       
       const response = await fetch(`${this.API_BASE_URL}?action=table-data`, {
         method: 'GET',
@@ -278,11 +278,11 @@ export class NASAADQLService {
       }
       
       const data = await response.json();
-      console.log(`✅ Données KOI tableau récupérées: ${data.length} entrées`);
+      console.log(`✅ KOI table data retrieved: ${data.length} entries`);
       return data as NASAKOITableData[];
       
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des données KOI tableau:', error);
+      console.error('❌ Error retrieving KOI table data:', error);
       throw error;
     }
   }
@@ -307,17 +307,17 @@ export class NASAADQLService {
       return await this.executeCustomADQLQuery(query);
       
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des tendances:', error);
+      console.error('❌ Error retrieving trends:', error);
       return [];
     }
   }
   
   /**
-   * Exécute une requête ADQL personnalisée via notre API Next.js
+   * Executes a custom ADQL query via our Next.js API
    */
   private static async executeCustomADQLQuery(query: string): Promise<Record<string, unknown>[]> {
     try {
-      console.log('🔍 Requête ADQL personnalisée:', query.trim());
+      console.log('🔍 Custom ADQL query:', query.trim());
       
       const response = await fetch(this.API_BASE_URL, {
         method: 'POST',
@@ -381,7 +381,7 @@ export class NASAADQLService {
       return await this.executeCustomADQLQuery(query);
       
     } catch (error) {
-      console.error('❌ Erreur lors de la récupération des infos table:', error);
+      console.error('❌ Error retrieving table info:', error);
       return [];
     }
   }

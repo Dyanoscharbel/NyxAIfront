@@ -28,7 +28,7 @@ export default function TestNASAPage() {
       setConnectionOk(isConnected);
       
       if (isConnected) {
-        // Récupération des stats avec cache
+        // Retrieve stats with cache
         console.log('📊 Récupération des statistiques via proxy Next.js (avec cache)...');
         const koiStats = await NASAADQLService.getKOIStatsWithBackgroundRefresh();
         setStats(koiStats);
@@ -101,7 +101,7 @@ export default function TestNASAPage() {
             </Button>
           </div>
 
-          {/* Résultat de la connexion */}
+          {/* Connection result */}
           {connectionOk !== null && (
             <div className="flex items-center space-x-2 p-3 rounded-lg bg-secondary/50">
               {connectionOk ? (

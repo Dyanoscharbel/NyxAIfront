@@ -1,59 +1,60 @@
-// Types pour les exoplanètes et la classification
+// Types for exoplanets and classification
 
 export interface Exoplanet {
   id: string;
   name: string;
   kepid?: number;
-  keplerName?: string; // Nom Kepler officiel (pour données NASA)
+  keplerName?: string; // Official Kepler name (for NASA data)
   
-  // Paramètres orbitaux
-  period?: number; // Période orbitale en jours
-  transitDuration?: number; // Durée de transit en heures
-  transitDepth?: number; // Profondeur de transit en ppm
+  // Orbital parameters
+  period?: number; // Orbital period in days
+  transitDuration?: number; // Transit duration in hours
+  transitDepth?: number; // Transit depth in ppm
   
-  // Paramètres physiques
-  planetRadius?: number; // Rayon planétaire en rayons terrestres
-  stellarName?: string; // Nom de l'étoile hôte
-  stellarRadius?: number; // Rayon stellaire en rayons solaires
-  stellarMass?: number; // Masse stellaire en masses solaires
-  stellarTemperature?: number; // Température stellaire en K
-  stellarMagnitude?: number; // Magnitude de l'étoile
+  // Physical parameters
+  planetRadius?: number; // Planetary radius in Earth radii
+  stellarName?: string; // Host star name
+  stellarRadius?: number; // Stellar radius in solar radii
+  stellarMass?: number; // Stellar mass in solar masses
+  stellarTemperature?: number; // Stellar temperature in K
+  stellarMagnitude?: number; // Star magnitude
   
-  // Paramètres calculés
-  insolationFlux?: number; // Flux d'insolation
-  equilibriumTemperature?: number; // Température d'équilibre en K
+  // Calculated parameters
+  insolationFlux?: number; // Insolation flux
+  equilibriumTemperature?: number; // Equilibrium temperature in K
   // Classification
   disposition: 'CONFIRMED' | 'CANDIDATE' | 'FALSE POSITIVE';
-  score?: number; // Score de confiance (0-1)
+  score?: number; // Confidence score (0-1)
   
-  // Métadonnées
+  // Metadata
   discoveryMethod?: string;
   discoveryDate?: string;
   mission: 'Kepler';
-  isAiGenerated?: boolean; // Indique si les données sont générées par l'IA
+  isAiGenerated?: boolean; // Indicates if data is AI-generated
+  explanation?: string; // AI-generated explanation for the classification
   
-  // URL pour la visualisation 3D (si confirmée)
+  // URL for 3D visualization (if confirmed)
   visualizationUrl?: string;
   
-  // Dates de mise à jour
+  // Update dates
   createdAt: string;
   updatedAt: string;
 }
 
 export interface ExoplanetFormData {
-  // Propriétés orbitales
+  // Orbital properties
   koi_period: number;
   koi_duration: number;
   koi_depth: number;
   koi_dor: number;
 
-  // Propriétés planétaires
+  // Planetary properties
   koi_ror: number;
   koi_prad: number;
   koi_impact: number;
   koi_teq: number;
 
-  // Propriétés stellaires
+  // Stellar properties
   koi_steff: number;
   koi_slogg: number;
   koi_srad: number;
@@ -61,7 +62,7 @@ export interface ExoplanetFormData {
   koi_srho: number;
   koi_kepmag: number;
 
-  // Propriétés d'observation
+  // Observation properties
   koi_model_snr: number;
   koi_num_transits: number;
   koi_max_sngle_ev: number;
@@ -110,7 +111,7 @@ export interface BatchClassificationResult {
   completedAt?: string;
 }
 
-// Types pour les statistiques et métriques
+// Types for statistics and metrics
 export interface DashboardStats {
   totalExoplanets: number;
   confirmedExoplanets: number;
@@ -119,14 +120,14 @@ export interface DashboardStats {
   modelAccuracy: number;
   lastUpdate: string;
   
-  // Statistiques par mission
+  // Statistics by mission
   missionStats: {
     kepler: number;
     k2: number;
     tess: number;
   };
   
-  // Tendances temporelles
+  // Temporal trends
   monthlyDiscoveries: {
     month: string;
     confirmed: number;
@@ -155,7 +156,7 @@ export interface ModelMetrics {
   };
 }
 
-// Types pour les filtres et recherche
+// Types for filters and search
 export interface ExoplanetFilters {
   disposition?: ('CONFIRMED' | 'CANDIDATE' | 'FALSE POSITIVE')[];
   mission?: ('Kepler')[];
@@ -185,7 +186,7 @@ export interface ExoplanetResponse {
   filters: ExoplanetFilters;
 }
 
-// Types pour les graphiques
+// Types for charts
 export interface ChartDataPoint {
   name: string;
   value: number;

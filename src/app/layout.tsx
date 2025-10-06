@@ -30,21 +30,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" className="dark" suppressHydrationWarning>
+    <html lang="en" className="light" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
                 if (typeof window !== 'undefined') {
-                  const theme = localStorage.getItem('theme') || 'dark';
-                  const locale = localStorage.getItem('locale') || 'fr';
+                  const theme = localStorage.getItem('theme') || 'light';
+                  const locale = localStorage.getItem('locale') || 'en';
                   document.documentElement.className = theme;
                   document.documentElement.lang = locale;
                 }
               } catch (e) {
-                document.documentElement.className = 'dark';
-                document.documentElement.lang = 'fr';
+                document.documentElement.className = 'light';
+                document.documentElement.lang = 'en';
               }
             `,
           }}

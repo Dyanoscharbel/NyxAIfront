@@ -45,7 +45,7 @@ import {
 import { Exoplanet, ExoplanetFilters, PaginationParams } from '@/types/exoplanet'
 import { NASAADQLService, NASAKOITableData } from '@/services/nasaADQLService'
 
-// Données NASA Kepler (données brutes)
+// NASA Kepler data (raw data)
 const nasaKeplerData: Exoplanet[] = [
   {
     id: 'nasa-1',
@@ -91,7 +91,7 @@ const nasaKeplerData: Exoplanet[] = [
   }
 ]
 
-// Notre base de données (données traitées + IA) - MAINTENANT REMPLACÉES PAR MONGODB
+// Our database (processed data + AI) - NOW REPLACED BY MONGODB
 /* const ourProcessedData: Exoplanet[] = [
   {
     id: 'koi-1',
@@ -201,7 +201,7 @@ const nasaKeplerData: Exoplanet[] = [
     createdAt: '2023-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z'
   },
-  // Données générées par l'IA
+  // AI-generated data
   {
     id: 'ai-1',
     name: 'Kepler-442b (IA)',
@@ -256,13 +256,13 @@ export default function DataExplorePage() {
   const router = useRouter()
   const [activeTab, setActiveTab] = useState('nasa')
 
-  // États pour les données NASA
+  // States for NASA data
   const [nasaData, setNasaData] = useState<NASAKOITableData[]>([])
   const [nasaLoading, setNasaLoading] = useState(false)
   const [nasaError, setNasaError] = useState<string | null>(null)
   const [nasaTotalCount, setNasaTotalCount] = useState(0)
 
-  // États pour les données MongoDB (Our Database)
+  // States for MongoDB data (Our Database)
   const [mongoData, setMongoData] = useState<Exoplanet[]>([])
   const [mongoLoading, setMongoLoading] = useState(false)
   const [mongoError, setMongoError] = useState<string | null>(null)
@@ -286,7 +286,7 @@ export default function DataExplorePage() {
   const [filters, setFilters] = useState<ExoplanetFilters>({})
   const [pagination, setPagination] = useState<PaginationParams>({
     page: 1,
-    limit: 25, // 25 entrées par page pour un meilleur affichage
+    limit: 25, // 25 entries per page for better display
     sortBy: 'name',
     sortOrder: 'asc'
   })
@@ -294,7 +294,7 @@ export default function DataExplorePage() {
   const [visualizationDialog, setVisualizationDialog] = useState(false)
   const [selectedExoplanet, setSelectedExoplanet] = useState<Exoplanet | null>(null)
   
-  // États pour l'export avancé
+  // States for advanced export
   const [exportDialog, setExportDialog] = useState(false)
   const [exportFormat, setExportFormat] = useState<'json' | 'csv'>('csv')
   const [exportFilters, setExportFilters] = useState({
@@ -305,7 +305,7 @@ export default function DataExplorePage() {
   })
   const [exportProgress, setExportProgress] = useState({ show: false, value: 0, status: '' })
 
-  // Fonction pour naviguer vers la page de profil de l'exoplanète
+  // Function to navigate to exoplanet profile page
   const openExoplanetProfile = (exoplanet: Exoplanet) => {
     router.push(`/exoplanet/${exoplanet.id}`)
   }
@@ -386,7 +386,7 @@ export default function DataExplorePage() {
     setExportDialog(true)
   }
 
-  // Liste complète des colonnes à exporter
+  // Complete list of columns to export
   const ALL_EXPORT_COLUMNS = [
     "dec", "dec_err", "dec_str", "kepid", "kepler_name", "kepoi_name", "koi_bin_oedp_sig",
     "koi_comment", "koi_count", "koi_datalink_dvr", "koi_datalink_dvs", "koi_delivname",
@@ -419,7 +419,7 @@ export default function DataExplorePage() {
     "koi_vet_date", "koi_vet_stat", "koi_zmag", "koi_zmag_err", "ra", "ra_err", "ra_str", "rowid"
   ]
 
-  // Fonction pour nettoyer une valeur de manière très sûre
+  // Function to clean a value very safely
   const safeCleaner = (value: unknown): unknown => {
     if (value === null || value === undefined) {
       return null
@@ -429,7 +429,7 @@ export default function DataExplorePage() {
       if (isNaN(value) || !isFinite(value) || value === Infinity || value === -Infinity) {
         return null
       }
-      // Limiter la précision pour éviter les problèmes
+      // Limit precision to avoid issues
       if (Math.abs(value) < 1e-10 && value !== 0) return 0
       if (Math.abs(value) > 1e10) return null
       return parseFloat(value.toFixed(6))
@@ -440,7 +440,7 @@ export default function DataExplorePage() {
       if (!cleaned || cleaned === 'null' || cleaned === 'undefined' || cleaned === 'NaN') {
         return null
       }
-      // Retourner seulement des caractères ASCII sûrs
+      // Return only safe ASCII characters
       return cleaned.replace(/[^\x20-\x7E]/g, '').substring(0, 500) || null
     }
     
@@ -451,21 +451,21 @@ export default function DataExplorePage() {
     return null
   }
 
-  // Fonction principale d'export - version complètement refaite
+  // Main export function - completely rewritten version
   const performAdvancedExport = async () => {
     setExportProgress({ show: true, value: 0, status: locale === 'en' ? 'Starting export...' : 'Démarrage de l\'export...' })
     
     try {
-      // Vérifier si on est sur l'onglet "Our Database" pour utiliser les données MongoDB
+      // Check if we're on the "Our Database" tab to use MongoDB data
       if (activeTab === 'processed') {
-        // Exporter les données MongoDB depuis le cache
+        // Export MongoDB data from cache
         setExportProgress({ show: true, value: 30, status: locale === 'en' ? 'Preparing MongoDB data...' : 'Préparation des données MongoDB...' })
         
         if (!mongoData || mongoData.length === 0) {
           throw new Error(locale === 'en' ? 'No MongoDB data available. Please load the data first.' : 'Aucune donnée MongoDB disponible. Veuillez charger les données d\'abord.')
         }
 
-        // Appliquer les filtres sur les données MongoDB
+        // Apply filters to MongoDB data
         let filteredData = [...mongoData]
         
         if (!exportFilters.all) {
@@ -480,7 +480,7 @@ export default function DataExplorePage() {
 
         setExportProgress({ show: true, value: 70, status: locale === 'en' ? 'Processing MongoDB data...' : 'Traitement des données MongoDB...' })
         
-        // Nettoyer les données MongoDB
+        // Clean MongoDB data
         const cleanedData = filteredData.map(item => {
           const cleanedItem: Record<string, unknown> = {}
           Object.entries(item).forEach(([key, value]) => {
@@ -491,13 +491,13 @@ export default function DataExplorePage() {
 
         setExportProgress({ show: true, value: 90, status: locale === 'en' ? 'Generating file...' : 'Génération du fichier...' })
         
-        // Générer le fichier selon le format
+        // Generate file according to format
         let fileContent: string
         let fileName: string
         let mimeType: string
 
         if (exportFormat === 'json') {
-          // Créer le JSON manuellement pour éviter JSON.stringify
+          // Create JSON manually to avoid JSON.stringify
           const jsonLines = cleanedData.map(item => {
             const pairs = Object.entries(item).map(([key, value]) => {
               const safeKey = JSON.stringify(key)
@@ -520,7 +520,7 @@ export default function DataExplorePage() {
           fileName = `mongodb-exoplanets-export-${Date.now()}.json`
           mimeType = 'application/json'
         } else {
-          // CSV - utiliser les clés du premier élément comme headers
+          // CSV - use keys from first element as headers
           const headers = cleanedData.length > 0 ? Object.keys(cleanedData[0]) : []
           const csvHeaders = headers.join(',')
           const csvRows = cleanedData.map(item => 
@@ -528,7 +528,7 @@ export default function DataExplorePage() {
               const value = item[header]
               if (value === null || value === undefined) return ''
               const strValue = String(value)
-              // Échapper proprement pour CSV
+              // Properly escape for CSV
               if (strValue.includes(',') || strValue.includes('"') || strValue.includes('\n')) {
                 return `"${strValue.replace(/"/g, '""')}"`
               }
@@ -541,7 +541,7 @@ export default function DataExplorePage() {
           mimeType = 'text/csv'
         }
 
-        // Télécharger le fichier
+        // Download the file
         const blob = new Blob([fileContent], { type: mimeType })
         const url = window.URL.createObjectURL(blob)
         const a = document.createElement('a')
@@ -565,8 +565,8 @@ export default function DataExplorePage() {
         return
       }
 
-      // Code existant pour l'export NASA (onglet "NASA Data")
-      // Utiliser toutes les colonnes comme demandé
+      // Existing code for NASA export (NASA Data tab)
+      // Use all columns as requested
       const EXPORT_COLUMNS = [
         "dec", "dec_err", "dec_str", "kepid", "kepler_name", "kepoi_name", "koi_bin_oedp_sig",
         "koi_comment", "koi_count", "koi_datalink_dvr", "koi_datalink_dvs", "koi_delivname",
@@ -599,7 +599,7 @@ export default function DataExplorePage() {
         "koi_vet_date", "koi_vet_stat", "koi_zmag", "koi_zmag_err", "ra", "ra_err", "ra_str", "rowid"
       ]
 
-      // Construction de la requête WHERE selon les filtres
+      // Build WHERE clause according to filters
       let whereClause = 'kepoi_name is not null'
       
       if (!exportFilters.all) {

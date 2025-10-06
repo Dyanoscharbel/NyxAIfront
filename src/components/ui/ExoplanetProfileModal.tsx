@@ -49,7 +49,7 @@ export function ExoplanetProfileModal({ exoplanet, isOpen, onClose, locale }: Ex
   }
 
   const downloadReport = () => {
-    // Simulation du téléchargement PDF
+    // PDF download simulation
     const reportContent = `
 RAPPORT D'ANALYSE - ${exoplanet.name}
 =====================================
@@ -174,14 +174,14 @@ Par: ExoPlanet AI - Système de classification d'exoplanètes
           </div>
         </div>
 
-        {/* Contenu principal - Layout horizontal très large */}
+        {/* Main content - Very wide horizontal layout */}
         <div className="flex-1 overflow-y-auto p-8 bg-background">
           <div className="max-w-none mx-auto space-y-8">
             
-            {/* Grille principale - 4 colonnes très larges */}
+            {/* Main grid - 4 very wide columns */}
             <div className="grid grid-cols-4 gap-8">
               
-              {/* Paramètres Orbitaux */}
+              {/* Orbital Parameters */}
               <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-700">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-blue-700 dark:text-blue-300">
@@ -226,7 +226,7 @@ Par: ExoPlanet AI - Système de classification d'exoplanètes
                 </CardContent>
               </Card>
 
-              {/* Paramètres Physiques */}
+              {/* Physical Parameters */}
               <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-700">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-green-700 dark:text-green-300">
@@ -271,7 +271,7 @@ Par: ExoPlanet AI - Système de classification d'exoplanètes
                 </CardContent>
               </Card>
 
-              {/* Paramètres Stellaires */}
+              {/* Stellar Parameters */}
               <Card className="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-700">
                 <CardHeader className="pb-3">
                   <CardTitle className="flex items-center space-x-2 text-orange-700 dark:text-orange-300">
@@ -317,7 +317,7 @@ Par: ExoPlanet AI - Système de classification d'exoplanètes
               </Card>
             </div>
 
-            {/* Métadonnées */}
+            {/* Metadata */}
             <Card className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-700 mb-8">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-purple-700 dark:text-purple-300">
