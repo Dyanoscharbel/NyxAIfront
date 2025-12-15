@@ -44,7 +44,7 @@ export default function Home() {
               <Telescope className="h-6 w-6 sm:h-8 sm:w-8 text-primary glow-effect flex-shrink-0" />
               <div className="min-w-0 max-w-[120px] sm:max-w-none">
                 <h1 className="text-sm sm:text-lg md:text-xl font-bold text-sidebar-foreground truncate">
-                  ExoPlanet AI
+                  ExoScope 
                 </h1>
                 <p className="text-xs sm:text-sm text-sidebar-foreground/60 truncate hidden sm:block">
                   Classification d&apos;exoplanètes
@@ -87,7 +87,7 @@ export default function Home() {
                 <span className="block sm:inline">Explore the cosmos</span>{" "}
                 <span className="block sm:inline">with{" "}</span>
                 <Highlight className="text-sidebar-foreground dark:text-sidebar-foreground">
-                  revolutionary AI
+                  AI
                 </Highlight>
               </>
             ) : (
@@ -95,7 +95,7 @@ export default function Home() {
                 <span className="block sm:inline">Explorez le cosmos</span>{" "}
                 <span className="block sm:inline">avec{" "}</span>
                 <Highlight className="text-sidebar-foreground dark:text-sidebar-foreground">
-                  l&apos;IA révolutionnaire
+                  l&apos;IA 
                 </Highlight>
               </>
             )}
