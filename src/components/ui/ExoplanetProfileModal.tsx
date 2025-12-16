@@ -87,7 +87,7 @@ Date de découverte: ${exoplanet.discoveryDate || 'N/A'}
 Mission: ${exoplanet.mission}
 
 Généré le: ${new Date().toLocaleDateString('fr-FR')}
-Par: ExoPlanet AI - Système de classification d'exoplanètes
+Par: Exoscope - Système de classification d'exoplanètes
     `
 
     const blob = new Blob([reportContent], { type: 'text/plain' })

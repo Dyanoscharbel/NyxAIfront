@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ExoPlanet AI - Exoplanet Classification",
+  title: "Exoscope - Exoplanet Classification",
   description: "Exoplanet classification application using NASA Kepler mission data with advanced AI technology",
   keywords: "exoplanets, NASA, Kepler, artificial intelligence, classification, space, astronomy",
-  authors: [{ name: "ExoPlanet AI Team" }],
+  authors: [{ name: "Exoscope Team" }],
 };
 
 export const viewport = {

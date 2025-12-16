@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
           const nasaResponse = await fetch(`${nasaRestUrl}?${restParams.toString()}`, {
             headers: {
               'Accept': 'application/json',
-              'User-Agent': 'ExoPlanet-AI-NextJS/1.0'
+              'User-Agent': 'Exoscope-NextJS/1.0'
             }
           });
           
@@ -211,7 +211,7 @@ export async function POST(request: NextRequest) {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'User-Agent': 'ExoPlanet-AI-NextJS/1.0'
+        'User-Agent': 'Exoscope-NextJS/1.0'
       }
     });
     

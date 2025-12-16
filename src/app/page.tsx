@@ -263,7 +263,7 @@ export default function Home() {
               <div className="flex items-center space-x-3 mb-4">
                 <Telescope className="h-8 w-8 text-primary glow-effect" />
                 <div>
-                  <h3 className="text-lg font-semibold text-sidebar-foreground">ExoPlanet AI</h3>
+                  <h3 className="text-lg font-semibold text-sidebar-foreground">Exoscope</h3>
                   <p className="text-sm text-sidebar-foreground/60">Classification d&apos;exoplanètes</p>
                 </div>
               </div>
@@ -299,7 +299,7 @@ export default function Home() {
           </div>
           
           <div className="border-t border-sidebar-border mt-8 pt-8 text-center text-sidebar-foreground/60">
-            <p>&copy; 2025 ExoPlanet AI. {t('footer.copyright')}</p>
+            <p>&copy; 2025 Exoscope. {t('footer.copyright')}</p>
           </div>
         </div>
       </footer>

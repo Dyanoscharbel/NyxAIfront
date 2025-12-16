@@ -159,7 +159,7 @@ export default function DashboardPage() {
             <Telescope className="h-8 w-8 text-primary glow-effect" />
             <div>
               <h1 className="text-3xl font-bold text-foreground">
-                ExoPlanet AI {t('dashboard.title')}
+                Exoscope {t('dashboard.title')}
               </h1>
               <p className="text-lg text-muted-foreground">
                 {locale === 'en' ? 'Intelligent exoplanet classification from NASA missions' : `Classification intelligente d'exoplanètes des missions NASA`}

@@ -630,7 +630,7 @@ export default function DataExplorePage() {
       const response = await fetch(`${nasaRestUrl}?${restParams.toString()}`, {
         headers: {
           'Accept': 'text/csv',
-          'User-Agent': 'ExoPlanet-AI-NextJS/1.0'
+          'User-Agent': 'Exoscope-NextJS/1.0'
         }
       })
 

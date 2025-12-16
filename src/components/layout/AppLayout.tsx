@@ -36,7 +36,7 @@ const SidebarHeader = () => {
         open ? "opacity-100" : "opacity-0 md:opacity-100"
       )}>
         <h1 className="text-xl font-bold text-sidebar-foreground">
-          ExoPlanet AI
+          Exoscope
         </h1>
         <p className="text-sm text-sidebar-foreground/60">
           {isHydrated && locale === 'en' ? 'Exoplanet Classification' : 'Classification d\'exoplanètes'}

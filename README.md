@@ -1,11 +1,11 @@
-# ExoPlanet AI - Advanced Exoplanet Classification System
+# Exoscope - Advanced Exoplanet Classification System
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.5.4-black?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.1.0-blue?logo=react&logoColor=white)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 
-ExoPlanet AI is a sophisticated web application that leverages advanced artificial intelligence to classify and analyze exoplanets using NASA's Kepler mission data. The platform provides comprehensive visualization tools, detailed analysis reports, and real-time data from NASA's exoplanet archive.
+Exoscope is a sophisticated web application that leverages advanced artificial intelligence to classify and analyze exoplanets using NASA's Kepler mission data. The platform provides comprehensive visualization tools, detailed analysis reports, and real-time data from NASA's exoplanet archive.
 
 ## 🌟 Features
 
