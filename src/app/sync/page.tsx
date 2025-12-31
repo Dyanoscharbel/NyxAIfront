@@ -67,7 +67,7 @@ export default function SyncPage() {
     try {
       const token = localStorage.getItem('auth_token')
       
-      const response = await fetch(`http://localhost:3001/api/sync/run${fullSync ? '?full=true' : ''}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/sync/run${fullSync ? '?full=true' : ''}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

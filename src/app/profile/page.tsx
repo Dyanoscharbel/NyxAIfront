@@ -81,7 +81,7 @@ export default function ProfilePage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/update-profile', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/update-profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -139,7 +139,7 @@ export default function ProfilePage() {
     setIsLoading(true)
 
     try {
-      const response = await fetch('http://localhost:3001/api/auth/change-password', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/change-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
