@@ -105,7 +105,7 @@ export default function ProfilePage() {
       if (updateUser) {
         updateUser({ 
           ...user, 
-          profileImage,
+          profileImage: profileImage || undefined,
           fullName: formData.fullName,
           emailNotifications: formData.emailNotifications,
           allowStudentMessages: formData.allowStudentMessages
