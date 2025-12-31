@@ -21,13 +21,17 @@ import {
   Github
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTheme } from "@/hooks/useTheme";
 import { useI18n } from "@/hooks/useI18n";
+import { useAuth } from "@/contexts/AuthContext";
 import { LocaleSwitcher } from "@/components/ui/locale-switcher";
 
 export default function Home() {
   const { mounted } = useTheme();
   const { t, isHydrated, locale } = useI18n();
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
   
   // Prevent hydration mismatch
   if (!mounted || !isHydrated) {
@@ -106,15 +110,20 @@ export default function Home() {
           </div>
           
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center px-1 sm:px-2 max-w-full">
-            <Button asChild size="lg" className="text-sm sm:text-lg bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto min-w-0">
-              <Link href="/dashboard" className="truncate">
-                {t('home.cta.start')} <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
-              </Link>
+            <Button 
+              size="lg" 
+              className="text-sm sm:text-lg bg-primary text-primary-foreground hover:bg-primary/90 w-full sm:w-auto min-w-0"
+              onClick={() => router.push(isAuthenticated ? '/dashboard' : '/login')}
+            >
+              {t('home.cta.start')} <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" />
             </Button>
-            <Button variant="outline" size="lg" className="text-sm sm:text-lg border-sidebar-border bg-sidebar-accent/10 text-sidebar-foreground hover:bg-sidebar-accent/20 w-full sm:w-auto min-w-0" asChild>
-              <Link href="/data" className="truncate">
-                {t('home.cta.explore')}
-              </Link>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="text-sm sm:text-lg border-sidebar-border bg-sidebar-accent/10 text-sidebar-foreground hover:bg-sidebar-accent/20 w-full sm:w-auto min-w-0"
+              onClick={() => router.push(isAuthenticated ? '/data' : '/login')}
+            >
+              {t('home.cta.explore')}
             </Button>
           </div>
         </div>
